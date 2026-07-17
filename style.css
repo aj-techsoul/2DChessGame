@@ -66,7 +66,8 @@ body {
   justify-content: center;
   align-items: center;
   transition: background-color 0.5s ease, color 0.5s ease;
-  overflow: hidden;
+  overflow-x: hidden; /* prevent horizontal scroll, allow vertical */
+  overflow-y: auto;
 }
 
 #app-container {
@@ -112,7 +113,9 @@ header h1 {
   font-size: 0.9rem;
 }
 
-input, select, button {
+input,
+select,
+button {
   background: rgba(0, 0, 0, 0.2);
   border: 1px solid var(--glass-border);
   color: var(--text-primary);
@@ -123,7 +126,8 @@ input, select, button {
   transition: all 0.3s ease;
 }
 
-input:focus, select:focus {
+input:focus,
+select:focus {
   border-color: var(--primary-color);
 }
 
@@ -140,13 +144,17 @@ input:focus, select:focus {
   color: #000;
   border: none;
 }
-[data-theme="ancient"] .primary-btn { color: #fff; }
+
+[data-theme="ancient"] .primary-btn {
+  color: #fff;
+}
 
 .primary-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
 }
 
+/* ===== MAIN LAYOUT (Desktop: side by side) ===== */
 main {
   display: flex;
   gap: 30px;
@@ -170,8 +178,9 @@ aside {
   overflow: hidden;
 }
 
-/* Chessboard */
+/* ===== CHESSBOARD ===== */
 #chessboard {
+  /* On desktop: size relative to viewport height so it fits within the layout */
   width: min(70vh, 100%);
   height: min(70vh, 100%);
   display: grid;
@@ -181,6 +190,8 @@ aside {
   border-radius: 4px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
   transition: border-color 0.5s ease;
+  /* Enforce perfect square aspect ratio as fallback */
+  aspect-ratio: 1 / 1;
 }
 
 .square {
@@ -192,8 +203,13 @@ aside {
   position: relative;
 }
 
-.square.light { background-color: var(--light-square); }
-.square.dark { background-color: var(--dark-square); }
+.square.light {
+  background-color: var(--light-square);
+}
+
+.square.dark {
+  background-color: var(--dark-square);
+}
 
 .square.highlight::after {
   content: '';
@@ -218,7 +234,7 @@ aside {
   background-color: var(--last-move) !important;
 }
 
-/* Pieces */
+/* ===== PIECES ===== */
 .piece {
   width: 90%;
   height: 90%;
@@ -228,7 +244,7 @@ aside {
   cursor: grab;
   position: relative;
   z-index: 10;
-  filter: drop-shadow(0px 4px 3px rgba(0,0,0,0.4));
+  filter: drop-shadow(0px 4px 3px rgba(0, 0, 0, 0.4));
   transition: transform 0.2s ease;
 }
 
@@ -245,9 +261,17 @@ aside {
 }
 
 @keyframes pulse-red {
-  0% { box-shadow: 0 15px 20px -10px #ff3333; }
-  50% { box-shadow: 0 15px 30px 0px #ff3333; }
-  100% { box-shadow: 0 15px 20px -10px #ff3333; }
+  0% {
+    box-shadow: 0 15px 20px -10px #ff3333;
+  }
+
+  50% {
+    box-shadow: 0 15px 30px 0px #ff3333;
+  }
+
+  100% {
+    box-shadow: 0 15px 20px -10px #ff3333;
+  }
 }
 
 /* King in check — orange warning glow */
@@ -259,9 +283,17 @@ aside {
 }
 
 @keyframes pulse-orange {
-  0% { box-shadow: 0 12px 20px -8px #ff9900; }
-  50% { box-shadow: 0 12px 28px 2px #ff9900; }
-  100% { box-shadow: 0 12px 20px -8px #ff9900; }
+  0% {
+    box-shadow: 0 12px 20px -8px #ff9900;
+  }
+
+  50% {
+    box-shadow: 0 12px 28px 2px #ff9900;
+  }
+
+  100% {
+    box-shadow: 0 12px 20px -8px #ff9900;
+  }
 }
 
 /* Selected square highlight */
@@ -271,27 +303,38 @@ aside {
   outline-offset: -3px;
 }
 
-/* Status Indicator */
+/* ===== STATUS & MESSAGES ===== */
 .status-indicator {
   padding: 10px;
   border-radius: 8px;
   text-align: center;
   font-weight: bold;
   font-size: 1.2rem;
-  background: rgba(0,0,0,0.3);
+  background: rgba(0, 0, 0, 0.3);
   transition: background 0.3s ease;
+  /* Reserve stable height to prevent layout jumping */
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.status-indicator.white-turn { border-left: 5px solid #fff; }
-.status-indicator.black-turn { border-left: 5px solid #000; }
+.status-indicator.white-turn {
+  border-left: 5px solid #fff;
+}
+
+.status-indicator.black-turn {
+  border-left: 5px solid #000;
+}
 
 #game-messages {
   color: #ff5555;
   font-weight: 600;
-  min-height: 24px;
+  /* Reserve stable height so content doesn't shift when messages appear/disappear */
+  min-height: 28px;
 }
 
-/* Move History */
+/* ===== MOVE HISTORY ===== */
 #move-history {
   flex: 1;
   overflow-y: auto;
@@ -310,13 +353,23 @@ aside {
   background: rgba(255, 255, 255, 0.05);
 }
 
-.move-row .move-num { width: 30px; opacity: 0.6; }
-.move-row .move-w, .move-row .move-b { flex: 1; }
+.move-row .move-num {
+  width: 30px;
+  opacity: 0.6;
+}
 
-/* Modal */
+.move-row .move-w,
+.move-row .move-b {
+  flex: 1;
+}
+
+/* ===== MODAL ===== */
 .modal {
   position: fixed;
-  top: 0; left: 0; width: 100vw; height: 100vh;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
   background: rgba(0, 0, 0, 0.7);
   display: flex;
   justify-content: center;
@@ -348,4 +401,226 @@ aside {
 .modal h2 {
   font-size: 2.5rem;
   color: #ff3333;
+}
+
+
+/* ============================================================
+   RESPONSIVE: Tablets (narrow landscape / portrait)
+   ============================================================ */
+@media (max-width: 900px) {
+  #app-container {
+    width: 95%;
+  }
+
+  header {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .controls {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+}
+
+
+/* ============================================================
+   RESPONSIVE: Mobile & small screens (≤ 768px)
+   Board on top → Game Status below → natural vertical scroll
+   ============================================================ */
+@media (max-width: 768px) {
+  body {
+    /* Let the page scroll naturally on mobile */
+    align-items: flex-start;
+    overflow-y: auto;
+    padding: 10px 0;
+  }
+
+  #app-container {
+    width: 95%;
+    height: auto;        /* Remove fixed viewport height */
+    min-height: auto;
+    padding-bottom: 20px;
+  }
+
+  /* Header: stack controls vertically */
+  header {
+    flex-direction: column;
+    gap: 10px;
+    align-items: stretch;
+    padding: 14px;
+  }
+
+  header h1 {
+    font-size: 1.4rem;
+    text-align: center;
+  }
+
+  .controls {
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+  }
+
+  .controls > div {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .controls label {
+    font-size: 0.8rem;
+    margin-right: 4px;
+  }
+
+  .controls input,
+  .controls select {
+    padding: 6px 8px;
+    font-size: 0.85rem;
+  }
+
+  /* ---- Main layout: stack vertically ---- */
+  main {
+    flex-direction: column;  /* Board on top, sidebar below */
+    align-items: center;
+    gap: 16px;
+    flex: none;              /* Don't stretch to fill viewport */
+  }
+
+  /* ---- Board container ---- */
+  .board-container {
+    flex: none;
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* ---- Chessboard: perfectly square, scaled to screen width ----
+       Uses vmin to stay square regardless of orientation.
+       Capped at 92vw so it never overflows horizontally.
+       aspect-ratio enforces squareness as a safety net. */
+  #chessboard {
+    width: min(92vw, 92vmin);
+    height: min(92vw, 92vmin);
+    aspect-ratio: 1 / 1;
+  }
+
+  /* ---- Sidebar (Game Status / History): flows below ---- */
+  aside {
+    flex: none;
+    width: 100%;
+    overflow: visible;       /* Allow content to take natural height */
+    padding: 0 10px;
+  }
+
+  aside h2 {
+    font-size: 1.2rem;
+  }
+
+  aside h3 {
+    font-size: 1rem;
+  }
+
+  /* Status and controls styling for mobile */
+  .status-indicator {
+    font-size: 1rem;
+    padding: 8px;
+    min-height: 40px;
+  }
+
+  .controls-panel {
+    display: flex;
+    justify-content: center;
+  }
+
+  .controls-panel .btn {
+    width: 100%;
+    padding: 10px;
+    font-size: 0.85rem;
+  }
+
+  /* Move history: visible, scrollable, capped height */
+  #move-history {
+    max-height: 200px;
+    overflow-y: auto;
+    flex: none;
+  }
+
+  /* Modal adjustments */
+  .modal-content {
+    width: 90vw;
+    padding: 24px;
+  }
+
+  .modal h2 {
+    font-size: 1.8rem;
+  }
+}
+
+
+/* ============================================================
+   RESPONSIVE: Very small phones (≤ 400px)
+   ============================================================ */
+@media (max-width: 400px) {
+  #app-container {
+    width: 98%;
+    gap: 10px;
+  }
+
+  header {
+    padding: 10px;
+  }
+
+  header h1 {
+    font-size: 1.2rem;
+  }
+
+  .controls label {
+    font-size: 0.75rem;
+  }
+
+  .controls input,
+  .controls select {
+    padding: 5px 6px;
+    font-size: 0.8rem;
+  }
+
+  #chessboard {
+    width: min(96vw, 96vmin);
+    height: min(96vw, 96vmin);
+  }
+
+  .board-container {
+    padding: 6px;
+    border-radius: 10px;
+  }
+
+  .glass-panel {
+    border-radius: 10px;
+    padding: 12px;
+  }
+}
+
+
+/* ============================================================
+   LANDSCAPE MOBILE: prevent board from being too tall
+   ============================================================ */
+@media (max-height: 500px) and (orientation: landscape) {
+  body {
+    align-items: flex-start;
+    overflow-y: auto;
+  }
+
+  #app-container {
+    height: auto;
+  }
+
+  /* In landscape on a phone, use vh to keep board visible */
+  #chessboard {
+    width: min(70vh, 90vw);
+    height: min(70vh, 90vw);
+  }
 }

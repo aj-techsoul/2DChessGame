@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en" data-theme="modern">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Chess Master</title>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <div id="app-container">
+      <header class="glass-panel">
+        <div class="logo">
+          <h1>♞ Chess AI</h1>
+        </div>
+        <div class="controls">
+          <div class="user-settings">
+            <label for="username">Player:</label>
+            <input type="text" id="username" value="Guest" placeholder="Enter username">
+          </div>
+          <div class="theme-settings">
+            <label for="theme-select">Theme:</label>
+            <select id="theme-select">
+              <option value="modern">Modern (Dark)</option>
+              <option value="ancient">Ancient</option>
+              <option value="forest">Forest</option>
+              <option value="underwater">Underwater</option>
+            </select>
+          </div>
+          <div class="color-settings">
+            <label for="color-select">Color:</label>
+            <select id="color-select">
+              <option value="w" selected>White</option>
+              <option value="b">Black</option>
+            </select>
+          </div>
+          <div class="difficulty-settings">
+            <label for="difficulty-select">Difficulty:</label>
+            <select id="difficulty-select">
+              <option value="1">Beginner</option>
+              <option value="2">Moderate</option>
+              <option value="3" selected>Expert</option>
+            </select>
+          </div>
+        </div>
+      </header>
+
+      <main>
+        <div class="board-container glass-panel">
+          <div id="chessboard"></div>
+        </div>
+        
+        <aside class="sidebar glass-panel">
+          <h2>Game Status</h2>
+          <div id="status-indicator" class="status-indicator white-turn">White's Turn</div>
+          <div id="game-messages"></div>
+          
+          <div class="controls-panel">
+            <button id="btn-restart" class="btn primary-btn">Restart Game</button>
+          </div>
+          
+          <h3>Move History</h3>
+          <div id="move-history"></div>
+        </aside>
+      </main>
+      
+      <div id="game-over-modal" class="modal hidden">
+        <div class="modal-content glass-panel">
+          <h2 id="game-over-title">Checkmate!</h2>
+          <p id="game-over-message">White wins!</p>
+          <button id="btn-modal-restart" class="btn primary-btn">Play Again</button>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>

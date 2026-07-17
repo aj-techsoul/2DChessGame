@@ -23,3 +23,6 @@ npm run dev
 Then open **http://localhost:5173** in your browser. 🎉
 
 ---
+
+**For mobiles n other small screen devices**
+USE THIS LINK: https://2dchess-jnngplon0-0yuki6s-projects.vercel.app/
